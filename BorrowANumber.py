@@ -7,6 +7,9 @@ import dotenv
 dotenv.load_dotenv()
 
 REDIS_PASSWORD = os.environ["REDIS_PASSWORD"]
+RANGE_START = int(os.environ["RANGE_START"])
+RANGE_AMOUNT = int(os.environ["RANGE_AMOUNT"])
+RANGE_END = RANGE_START + RANGE_AMOUNT
 
 redis_db = RedisCluster(host="redis-cluster.infra.svc.cluster.local", port=6379, password=REDIS_PASSWORD)
 
@@ -63,7 +66,7 @@ def get_checked_numbers():
 
 @app.route('/reset', methods=['GET'])
 def reset_numbers():
-	num_list = range(10000,20000)
+	num_list = range(RANGE_START,RANGE_END)
 	
 	for x in num_list:
 		redis_db.sadd('checkable_numbers', x)
